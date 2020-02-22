@@ -188,6 +188,7 @@ func newMarshal() *RootFileXml {
 	return obj
 }
 
+//ParseRootFile parse root file xml
 func ParseRootFile(f *zip.File) (*RootFileXml, error) {
 	reader, err := f.Open()
 	if err != nil {

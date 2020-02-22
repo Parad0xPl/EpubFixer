@@ -6,12 +6,14 @@ import (
 	"os"
 )
 
+//ReadAllFileFromZip Read all data from and return it as string
 func ReadAllFileFromZip(zipFile *zip.File) (string, error) {
 	var err error
 	reader, err := zipFile.Open()
 	if err != nil {
 		return "", err
 	}
+	// Possible error when platform is not 64 bit
 	buffer := make([]byte, zipFile.UncompressedSize64)
 	_, err = reader.Read(buffer)
 	if err != nil {
@@ -20,6 +22,7 @@ func ReadAllFileFromZip(zipFile *zip.File) (string, error) {
 	return string(buffer), err
 }
 
+//ProcessFile Perform fix on file
 func ProcessFile(inputFilename string) error {
 	var err error
 	outputFilename := inputFilename + ".fixed.epub"
@@ -52,7 +55,7 @@ func ProcessFile(inputFilename string) error {
 	return err
 }
 
-// Function which should be adjusted
+//PatchBook modify book structure with fixes
 func PatchBook(book *EPUB) {
 	for _, sr := range book.RootFiles {
 		ui := sr.UniqueIdentifier

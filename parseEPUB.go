@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+//EPUB holds structured data needed for recreating file
 type EPUB struct {
 	MimeType  string
 	Files     map[string]*zip.File
@@ -12,6 +13,7 @@ type EPUB struct {
 	RootFiles map[string]*RootFileXml
 }
 
+//ParseEPUB reads zip/epub file and bind content to EPUB struct
 func ParseEPUB(zipReader *zip.Reader) (*EPUB, error) {
 	book := new(EPUB)
 	book.Files = make(map[string]*zip.File)

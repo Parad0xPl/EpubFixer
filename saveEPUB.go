@@ -9,6 +9,7 @@ import (
 	"path"
 )
 
+//WriteMimeType create "mimetype" file in archive
 func WriteMimeType(zipWriter *zip.Writer) error {
 	file, err := zipWriter.Create("mimetype")
 	if err != nil {
@@ -21,6 +22,7 @@ func WriteMimeType(zipWriter *zip.Writer) error {
 	return nil
 }
 
+//WriteContainer serialize and write container file in archive
 func WriteContainer(book *EPUB, zipWriter *zip.Writer) error {
 	file, err := zipWriter.Create("META-INF/container.xml")
 	if err != nil {
@@ -40,6 +42,7 @@ func WriteContainer(book *EPUB, zipWriter *zip.Writer) error {
 	return nil
 }
 
+//WriteRootFiles serialize and write root files of epub
 func WriteRootFiles(book *EPUB, zipWriter *zip.Writer) error {
 	for rfPath, rf := range book.RootFiles {
 		rf.MetaData.(*MetaDataUnmarshal).XmlnsDc = "http://purl.org/dc/elements/1.1/"
@@ -70,6 +73,7 @@ func WriteRootFiles(book *EPUB, zipWriter *zip.Writer) error {
 	return nil
 }
 
+//WriteRefFiles save all referenced files from each root file to archive
 func WriteRefFiles(book *EPUB, w *zip.Writer) error {
 	for rfPath, rf := range book.RootFiles {
 		dir := path.Dir(rfPath)
@@ -77,7 +81,7 @@ func WriteRefFiles(book *EPUB, w *zip.Writer) error {
 			targetPath := path.Join(dir, file.Href)
 			bookFile, ok := book.Files[targetPath]
 			if !ok {
-				fmt.Println("W sumie cos nie dziala")
+				fmt.Printf("Can't find refereed file '%s' in structure cache. RootFile path: '%s'\n", targetPath, rfPath)
 				continue
 			}
 			file, err := w.Create(targetPath)
@@ -101,6 +105,7 @@ func WriteRefFiles(book *EPUB, w *zip.Writer) error {
 	return nil
 }
 
+//SaveEPUB serialize structures and write it to file
 func SaveEPUB(book *EPUB, filename string) error {
 	var err error
 

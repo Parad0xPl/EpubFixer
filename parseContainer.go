@@ -23,6 +23,7 @@ type ContainerXml struct {
 	RootFiles RootFiles `xml:"rootfiles"`
 }
 
+//ParseContainerFile parse container xml
 func ParseContainerFile(f *zip.File) (*ContainerXml, error) {
 	var err error
 	reader, err := f.Open()
